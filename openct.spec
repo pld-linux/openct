@@ -10,7 +10,9 @@ Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc.org/
+BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
@@ -72,7 +74,11 @@ Statyczne biblioteki OpenCT.
 %patch0 -p1
 
 %build
-cp -f /usr/share/automake/config.* .
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--with-bundle-dir=%{_libdir}/pcsc/drivers
 %{__make}
