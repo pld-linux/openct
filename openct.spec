@@ -4,7 +4,7 @@ Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
 Version:	0.5.0
-Release:	0.1
+Release:	0.2
 License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
@@ -57,7 +57,6 @@ Statyczne biblioteki OpenCT.
 
 %build
 %configure 
-
 %{__make}
 
 %install
@@ -85,13 +84,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/openct-control
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/openct-*.so
+%attr(755,root,root) %{_libdir}/libopenctapi.so
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/libifd.so
+%attr(755,root,root) %{_libdir}/libopenct.so
 %{_libdir}/lib*.la
 %{_includedir}/openct
 %{_pkgconfigdir}/*.pc
