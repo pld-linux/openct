@@ -2,7 +2,7 @@ Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.2
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
@@ -16,8 +16,8 @@ BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
-Requires(post):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -45,11 +45,23 @@ OpenCT driver for PC/SC.
 %description -n pcsc-driver-openct -l pl
 Sterownik OpenCT dla PC/SC.
 
+%package libs
+Summary:	OpenCT library
+Summary(pl):	Biblioteka OpenCT
+Group:		Libraries
+Requires(post):	/sbin/ldconfig
+
+%description libs
+OpenCT library.
+
+%description libs -l pl
+Biblioteka OpenCT.
+
 %package devel
 Summary:	OpenCT development files
 Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 OpenSC development files.
@@ -100,7 +112,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig
 /sbin/chkconfig --add openct
 if [ -f /var/lock/subsys/openct ]; then
 	/etc/rc.d/init.d/openct restart >&2
@@ -115,7 +126,9 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del openct
 fi
-%postun	-p /sbin/ldconfig
+
+%post   libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
