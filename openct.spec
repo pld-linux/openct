@@ -10,7 +10,6 @@ Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 # Source0-md5:	5e6de721d22db8f5da060a1843bb3259
 URL:		http://www.opensc.org/
-BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
@@ -32,7 +31,7 @@ urz±dzeñ USB w locie (hotplug).
 Summary:	OpenCT development files
 Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 OpenSC development files.
@@ -44,7 +43,7 @@ Pliki dla programistów u¿ywaj±cych OpenCT.
 Summary:	Static OpenCT libraries
 Summary(pl):	Bibloteki statyczne OpenCT
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static OpenCT libraries.
@@ -56,6 +55,7 @@ Statyczne biblioteki OpenCT.
 %setup -q
 
 %build
+cp -f /usr/share/automake/config.* .
 %configure 
 %{__make}
 
