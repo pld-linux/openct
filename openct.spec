@@ -10,7 +10,7 @@ Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
