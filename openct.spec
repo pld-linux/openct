@@ -3,12 +3,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.1.0
+Version:	0.5.0
 Release:	0.1
 License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
-# Source0-md5:	d405dea25b657475053539e6ffb66135
+# Source0-md5:	5e6de721d22db8f5da060a1843bb3259
 URL:		http://www.opensc.org/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -62,7 +62,7 @@ Statyczne biblioteki OpenCT.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/hotplug/usb
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -79,14 +79,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ANNOUNCE ChangeLog NEWS doc/openct.{html,css}
+%doc AUTHORS ANNOUNCE ChangeLog NEWS TODO doc/openct.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
-%attr(755,root,root) %{_sbindir}/hotplug.openct
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/openct-control
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/openct-*.so
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
+%attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
+%{_sysconfdir}/hotplug/usb/openct.usermap
 
 %files devel
 %defattr(644,root,root,755)
