@@ -1,11 +1,11 @@
 # TODO:
-# - install openct.conf
 # - write init script
 Summary:	OpenCT library - library for accessing smart card terminals
+Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
 Version:	0.1.0
 Release:	0.1
-License:	BSD-like ?
+License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 # Source0-md5:	d405dea25b657475053539e6ffb66135
@@ -17,14 +17,21 @@ BuildRequires:	pcsc-lite-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-OpenCT is a library for accessing smart card terminals.  It provides a rich set
-of functions for driver writers, protocol drivers for T=0 and T=1, serial and
-USB functionality, including USB hotplugging. 
+OpenCT is a library for accessing smart card terminals. It provides a
+rich set of functions for driver writers, protocol drivers for T=0 and
+T=1, serial and USB functionality, including USB hotplugging. 
+
+%description -l pl
+OpenCT to biblioteka s³u¿±ca do dostêpu do terminali kart
+procesorowych (smart card). Dostarcza bogaty zbiór funkcji dla
+pisz±cych sterowniki, sterowniki protoko³ów dla T=0 i T=1,
+funkcjonalno¶æ dla portów szeregowych i USB, w³±cznie z pod³±czaniem
+urz±dzeñ USB w locie (hotplug).
 
 %package devel
 Summary:	OpenCT development files
 Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
-Group:		Development/Tools
+Group:		Development/Libraries
 Requires:	%{name} = %{version}
 
 %description devel
@@ -36,7 +43,7 @@ Pliki dla programistów u¿ywaj±cych OpenCT.
 %package static
 Summary:	Static OpenCT libraries
 Summary(pl):	Bibloteki statyczne OpenCT
-Group:		Development/Tools
+Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
@@ -55,9 +62,12 @@ Statyczne biblioteki OpenCT.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_sysconfdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 
@@ -76,6 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/openct-control
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(755,root,root) %{_libdir}/openct-*.so
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
 
 %files devel
 %defattr(644,root,root,755)
