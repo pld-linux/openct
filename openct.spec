@@ -9,12 +9,15 @@ License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 # Source0-md5:	18d8bca0372515842fec9f366ca461d1
+Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc.org/
 BuildRequires:	automake
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
+Requires(post):	/sbin/ldconfig
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -79,12 +82,13 @@ cp -f /usr/share/automake/config.* .
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/var/run/openct}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
-:> $RPM_BUILD_ROOT/var/run/openct/status
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 
@@ -93,10 +97,20 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
-if [ ! -f /var/run/openct/status ]; then
-	%{_sbindir}/openct-control init
+/sbin/chkconfig --add openct
+if [ -f /var/lock/subsys/openct ]; then
+	/etc/rc.d/init.d/openct restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/openct start\" to start openct."
 fi
 
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/openct ]; then
+		/etc/rc.d/init.d/openct stop >&2
+	fi
+	/sbin/chkconfig --del openct
+fi
 %postun	-p /sbin/ldconfig
 
 %files
@@ -110,10 +124,10 @@ fi
 %attr(755,root,root) %{_libdir}/libopenctapi.so
 %attr(755,root,root) %{_libdir}/openct-ifd.so
 %dir /var/run/openct
-%ghost /var/run/openct/status
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
+%attr(754,root,root) /etc/rc.d/init.d/openct
 
 %files -n pcsc-driver-openct
 %defattr(644,root,root,755)
