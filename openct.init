@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# openct	OpenCT card service
+#
+# chkconfig:	2345 37 65
+#
+# description:	OpenCT is a library for accessing smart card terminals.
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/openct ]; then
+		show "Initializing OpenCT status"
+		busy
+		openct-control init
+		RETVAL=$?
+		if [ $RETVAL -eq 0 ]; then
+			ok
+			touch /var/lock/subsys/openct
+		else
+			fail
+		fi
+	else
+		msg_already_running openct
+	fi
+	;;
+  stop)
+	# Stop daemons.
+	if [ -f /var/lock/subsys/openct ]; then
+		show "Shutting down OpenCT"
+		busy
+		openct-control shutdown >/dev/null
+		ok
+		rm -f /var/lock/subsys/openct /var/run/openct/* >/dev/null 2>&1
+	else
+		msg_not_running openct
+	fi
+	;;
+  status)
+	status openct
+	RETVAL=$?
+	;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  reload)
+  	$0 restart
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|reload|status}"
+	exit 3
+	;;
+esac
+
+exit $RETVAL
