@@ -83,13 +83,19 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/var/run/openct}
 	DESTDIR=$RPM_BUILD_ROOT
 
 install etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
+:> $RPM_BUILD_ROOT/var/run/openct/status
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-p /sbin/ldconfig
+%post
+/sbin/ldconfig
+if [ ! -f /var/run/openct/status ]; then
+	%{_sbindir}/openct-control init
+fi
+
 %postun	-p /sbin/ldconfig
 
 %files
@@ -103,6 +109,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libopenctapi.so
 %attr(755,root,root) %{_libdir}/openct-ifd.so
 %dir /var/run/openct
+%ghost /var/run/openct/status
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
