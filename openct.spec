@@ -137,9 +137,6 @@ fi
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
 %attr(755,root,root) %{_sbindir}/openct-control
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %{_libdir}/libopenctapi.so
-%attr(755,root,root) %{_libdir}/openct-ifd.so
 %dir /var/run/openct
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
@@ -154,6 +151,12 @@ fi
 %attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Info.plist
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/PkgInfo
+
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libopenctapi.so
+%attr(755,root,root) %{_libdir}/openct-ifd.so
 
 %files devel
 %defattr(644,root,root,755)
