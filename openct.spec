@@ -14,6 +14,7 @@ URL:		http://www.opensc.org/
 BuildRequires:	automake
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
+BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
