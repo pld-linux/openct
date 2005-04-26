@@ -1,25 +1,20 @@
---- openct-0.6.1/src/ifd/ifd-ccid.c.orig	Thu Jan 22 09:37:03 2004
-+++ openct-0.6.1/src/ifd/ifd-ccid.c	Wed Jul 28 13:02:10 2004
-@@ -585,8 +585,8 @@
- 	  return -1;
-      }  
- 
--     if (ccid.dwMaxCCIDMessageLength < 271) {
--	  ct_error("ccid: max message size is only %d", r);
-+     if (ccid.dwMaxCCIDMessageLength < 263 /*271*/) {
-+	  ct_error("ccid: max message size is only %d", ccid.dwMaxCCIDMessageLength);
- 	  free(st);
- 	  ifd_device_close(dev);
- 	  return -1;
---- openct-0.6.1/src/ifd/ifd-ccid.c.orig	Wed Jul 28 13:03:00 2004
-+++ openct-0.6.1/src/ifd/ifd-ccid.c	Wed Jul 28 14:59:02 2004
-@@ -444,8 +444,8 @@
+--- openct-0.6.4/src/ifd/ifd-ccid.c.orig	2005-04-26 19:54:19.353541448 +0200
++++ openct-0.6.4/src/ifd/ifd-ccid.c	2005-04-26 20:08:58.811843464 +0200
+@@ -464,9 +464,15 @@
+ 	       for (alt=0;alt < conf.interface[ifc].num_altsetting;alt++) {
  		    int ok=0;
  		    intf=&conf.interface[ifc].altsetting[alt];
- 		    if (intf->bInterfaceClass != 0xb || 
--			intf->bInterfaceSubClass != 0 || 
+-		    if (intf->bInterfaceClass != 0xb ||
+-			intf->bInterfaceSubClass != 0 ||
 -			intf->bInterfaceProtocol != 0)
-+			intf->bInterfaceSubClass > 1 || 
++		    /* it should be strict 0xb:0:0 test, but:
++		     * - some "almost CCID-compliant" readers use class 0xb with
++		     *   invalid 1:1 values for subclass:protocol
++		     * - some other readers use "proprietary class" 0xff:1:1,
++		     *   being "almost CCID-compliant"
++		     */
++		    if (((intf->bInterfaceClass != 0xb) && (intf->bInterfaceClass != 0xff)) ||
++			intf->bInterfaceSubClass > 1 ||
 +			intf->bInterfaceProtocol > 1)
  			 continue;
  		    if (intf->bNumEndpoints != 3)
