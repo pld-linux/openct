@@ -1,12 +1,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.2
-Release:	3
+Version:	0.6.4
+Release:	1
 License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
-# Source0-md5:	18d8bca0372515842fec9f366ca461d1
+# Source0-md5:	d6e54a3001a217f812dc7ec837ab58ba
 Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc.org/
@@ -49,7 +49,7 @@ Sterownik OpenCT dla PC/SC.
 Summary:	OpenCT library
 Summary(pl):	Biblioteka OpenCT
 Group:		Libraries
-Requires(post):	/sbin/ldconfig
+Conflicts:	openct < 0.6.2-3
 
 %description libs
 OpenCT library.
@@ -132,13 +132,13 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ANNOUNCE ChangeLog NEWS TODO doc/openct.{html,css}
+%doc ANNOUNCE AUTHORS ChangeLog LICENSE NEWS TODO doc/openct.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
 %attr(754,root,root) /etc/rc.d/init.d/openct
@@ -148,7 +148,7 @@ fi
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux
-%attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd
+%attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd.so
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Info.plist
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/PkgInfo
 
