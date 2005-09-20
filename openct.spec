@@ -1,12 +1,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.4
+Version:	0.6.6
 Release:	1
 License:	BSD-like
 Group:		Applications
 Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
-# Source0-md5:	d6e54a3001a217f812dc7ec837ab58ba
+# Source0-md5:	a9de3bef8e5e2827b8d72a2a50d0bc66
 Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc.org/
@@ -132,7 +132,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE AUTHORS ChangeLog LICENSE NEWS TODO doc/openct.{html,css}
+%doc ANNOUNCE NEWS TODO doc/*.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
@@ -142,6 +142,7 @@ fi
 %attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
 %attr(754,root,root) /etc/rc.d/init.d/openct
+%{_mandir}/man1/openct-tool.1*
 
 %files -n pcsc-driver-openct
 %defattr(644,root,root,755)
@@ -154,18 +155,20 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libopenct.so.*.*.*
 %attr(755,root,root) %{_libdir}/libopenctapi.so
 %attr(755,root,root) %{_libdir}/openct-ifd.so
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libifd.so
+%doc doc/api/*
 %attr(755,root,root) %{_libdir}/libopenct.so
-%{_libdir}/lib*.la
+%{_libdir}/libopenct.la
+%{_libdir}/libopenctapi.la
 %{_includedir}/openct
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/libopenct.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libopenct.a
+%{_libdir}/libopenctapi.a
