@@ -9,7 +9,7 @@ Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
 # Source0-md5:	a9de3bef8e5e2827b8d72a2a50d0bc66
 Source1:	%{name}.init
 Patch0:		%{name}-ccid.patch
-URL:		http://www.opensc.org/
+URL:		http://www.opensc.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	libtool
