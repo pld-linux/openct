@@ -1,14 +1,13 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.6
+Version:	0.6.7
 Release:	1
-License:	BSD-like
+License:	LGPL
 Group:		Applications
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	a9de3bef8e5e2827b8d72a2a50d0bc66
+# Source0-md5:	1b33d319f364acafbcf130d7ba34ea4c
 Source1:	%{name}.init
-Patch0:		%{name}-ccid.patch
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -48,6 +47,7 @@ Sterownik OpenCT dla PC/SC.
 %package libs
 Summary:	OpenCT library
 Summary(pl):	Biblioteka OpenCT
+License:	BSD (libopenct), LGPL (the rest)
 Group:		Libraries
 Conflicts:	openct < 0.6.2-3
 
@@ -60,6 +60,7 @@ Biblioteka OpenCT.
 %package devel
 Summary:	OpenCT development files
 Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
+License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -72,6 +73,7 @@ Pliki dla programistów u¿ywaj±cych OpenCT.
 %package static
 Summary:	Static OpenCT libraries
 Summary(pl):	Bibloteki statyczne OpenCT
+License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -83,11 +85,10 @@ Statyczne biblioteki OpenCT.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I aclocal
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -132,7 +133,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCE NEWS TODO doc/*.{html,css}
+%doc NEWS TODO doc/ChangeLog doc/*.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
