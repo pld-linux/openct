@@ -1,12 +1,13 @@
+# TODO: move hotplug and udev stuff to subpackages?
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.8
+Version:	0.6.9
 Release:	1
 License:	LGPL
 Group:		Applications
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	8fca95145f28929bf5f06bc03b32b625
+# Source0-md5:	26c7f8d9fabbd698303601cc7d844252
 Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
@@ -98,7 +99,7 @@ Statyczne biblioteki OpenCT.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/var/run/openct}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/lib/udev,/var/run/openct}
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
@@ -140,8 +141,8 @@ fi
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
-%attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
 %{_sysconfdir}/hotplug/usb/openct.usermap
+%attr(755,root,root) /lib/udev/openct_*
 %attr(754,root,root) /etc/rc.d/init.d/openct
 %{_mandir}/man1/openct-tool.1*
 
