@@ -2,12 +2,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.9
+Version:	0.6.10
 Release:	1
 License:	LGPL
 Group:		Applications
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	26c7f8d9fabbd698303601cc7d844252
+# Source0-md5:	fc91a7cda636b0dc5de74f1d22c2d914
 Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
