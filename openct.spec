@@ -12,6 +12,8 @@ Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+# just for config.rpath (required by aclocal/lib-link.m4)
+BuildRequires:	gettext-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
@@ -87,6 +89,8 @@ Statyczne biblioteki OpenCT.
 %prep
 %setup -q
 
+cp -f /usr/share/gettext/config.rpath .
+
 %build
 %{__libtoolize}
 %{__aclocal} -I aclocal
@@ -94,6 +98,7 @@ Statyczne biblioteki OpenCT.
 %{__autoheader}
 %{__automake}
 %configure \
+	--disable-rpath \
 	--with-bundle-dir=%{_libdir}/pcsc/drivers
 %{__make}
 
