@@ -1,17 +1,19 @@
+# TODO: move hotplug and udev stuff to subpackages?
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.2
-Release:	3
-License:	BSD-like
+Version:	0.6.11
+Release:	1
+License:	LGPL
 Group:		Applications
-Source0:	http://www.opensc.org/files/%{name}-%{version}.tar.gz
-# Source0-md5:	18d8bca0372515842fec9f366ca461d1
+Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
+# Source0-md5:	1cdd16b2c1443ecb986abf125af50e7f
 Source1:	%{name}.init
-Patch0:		%{name}-ccid.patch
-URL:		http://www.opensc.org/
+URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+# just for config.rpath (required by aclocal/lib-link.m4)
+BuildRequires:	gettext-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
@@ -48,8 +50,9 @@ Sterownik OpenCT dla PC/SC.
 %package libs
 Summary:	OpenCT library
 Summary(pl):	Biblioteka OpenCT
+License:	BSD (libopenct), LGPL (the rest)
 Group:		Libraries
-Requires(post):	/sbin/ldconfig
+Conflicts:	openct < 0.6.2-3
 
 %description libs
 OpenCT library.
@@ -60,6 +63,7 @@ Biblioteka OpenCT.
 %package devel
 Summary:	OpenCT development files
 Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
+License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -72,6 +76,7 @@ Pliki dla programistów u¿ywaj±cych OpenCT.
 %package static
 Summary:	Static OpenCT libraries
 Summary(pl):	Bibloteki statyczne OpenCT
+License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -83,21 +88,23 @@ Statyczne biblioteki OpenCT.
 
 %prep
 %setup -q
-%patch0 -p1
+
+cp -f /usr/share/gettext/config.rpath .
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I aclocal
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 %configure \
+	--disable-rpath \
 	--with-bundle-dir=%{_libdir}/pcsc/drivers
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/var/run/openct}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/lib/udev,/var/run/openct}
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
@@ -132,40 +139,43 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ANNOUNCE ChangeLog NEWS TODO doc/openct.{html,css}
+%doc NEWS TODO doc/ChangeLog doc/*.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openct.conf
-%attr(755,root,root) %{_sysconfdir}/hotplug/usb/openct
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
 %{_sysconfdir}/hotplug/usb/openct.usermap
+%attr(755,root,root) /lib/udev/openct_*
 %attr(754,root,root) /etc/rc.d/init.d/openct
+%{_mandir}/man1/openct-tool.1*
 
 %files -n pcsc-driver-openct
 %defattr(644,root,root,755)
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux
-%attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd
+%attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd.so
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Info.plist
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/PkgInfo
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libopenct.so.*.*.*
 %attr(755,root,root) %{_libdir}/libopenctapi.so
 %attr(755,root,root) %{_libdir}/openct-ifd.so
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libifd.so
+%doc doc/api/*
 %attr(755,root,root) %{_libdir}/libopenct.so
-%{_libdir}/lib*.la
+%{_libdir}/libopenct.la
+%{_libdir}/libopenctapi.la
 %{_includedir}/openct
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/libopenct.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libopenct.a
+%{_libdir}/libopenctapi.a
