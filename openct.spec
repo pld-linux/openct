@@ -1,6 +1,6 @@
 # TODO: move hotplug and udev stuff to subpackages?
 Summary:	OpenCT library - library for accessing smart card terminals
-Summary(pl):	OpenCT - biblioteka dostêpu do terminali kart procesorowych
+Summary(pl.UTF-8):   OpenCT - biblioteka dostÄ™pu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.11
 Release:	1
@@ -27,16 +27,16 @@ OpenCT is a library for accessing smart card terminals. It provides a
 rich set of functions for driver writers, protocol drivers for T=0 and
 T=1, serial and USB functionality, including USB hotplugging. 
 
-%description -l pl
-OpenCT to biblioteka s³u¿±ca do dostêpu do terminali kart
-procesorowych (smart card). Dostarcza bogaty zbiór funkcji dla
-pisz±cych sterowniki, sterowniki protoko³ów dla T=0 i T=1,
-funkcjonalno¶æ dla portów szeregowych i USB, w³±cznie z pod³±czaniem
-urz±dzeñ USB w locie (hotplug).
+%description -l pl.UTF-8
+OpenCT to biblioteka sÅ‚uÅ¼Ä…ca do dostÄ™pu do terminali kart
+procesorowych (smart card). Dostarcza bogaty zbiÃ³r funkcji dla
+piszÄ…cych sterowniki, sterowniki protokoÅ‚Ã³w dla T=0 i T=1,
+funkcjonalnoÅ›Ä‡ dla portÃ³w szeregowych i USB, wÅ‚Ä…cznie z podÅ‚Ä…czaniem
+urzÄ…dzeÅ„ USB w locie (hotplug).
 
 %package -n pcsc-driver-openct
 Summary:	OpenCT driver for PC/SC
-Summary(pl):	Sterownik OpenCT dla PC/SC
+Summary(pl.UTF-8):   Sterownik OpenCT dla PC/SC
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	pcsc-lite
@@ -44,12 +44,12 @@ Requires:	pcsc-lite
 %description -n pcsc-driver-openct
 OpenCT driver for PC/SC.
 
-%description -n pcsc-driver-openct -l pl
+%description -n pcsc-driver-openct -l pl.UTF-8
 Sterownik OpenCT dla PC/SC.
 
 %package libs
 Summary:	OpenCT library
-Summary(pl):	Biblioteka OpenCT
+Summary(pl.UTF-8):   Biblioteka OpenCT
 License:	BSD (libopenct), LGPL (the rest)
 Group:		Libraries
 Conflicts:	openct < 0.6.2-3
@@ -57,12 +57,12 @@ Conflicts:	openct < 0.6.2-3
 %description libs
 OpenCT library.
 
-%description libs -l pl
+%description libs -l pl.UTF-8
 Biblioteka OpenCT.
 
 %package devel
 Summary:	OpenCT development files
-Summary(pl):	Pliki dla programistów u¿ywaj±cych OpenCT
+Summary(pl.UTF-8):   Pliki dla programistÃ³w uÅ¼ywajÄ…cych OpenCT
 License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
@@ -70,12 +70,12 @@ Requires:	%{name}-libs = %{version}-%{release}
 %description devel
 OpenSC development files.
 
-%description devel -l pl
-Pliki dla programistów u¿ywaj±cych OpenCT.
+%description devel -l pl.UTF-8
+Pliki dla programistÃ³w uÅ¼ywajÄ…cych OpenCT.
 
 %package static
 Summary:	Static OpenCT libraries
-Summary(pl):	Bibloteki statyczne OpenCT
+Summary(pl.UTF-8):   Bibloteki statyczne OpenCT
 License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
@@ -83,7 +83,7 @@ Requires:	%{name}-devel = %{version}-%{release}
 %description static
 Static OpenCT libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki OpenCT.
 
 %prep
