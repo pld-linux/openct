@@ -1,6 +1,6 @@
 # TODO: move hotplug and udev stuff to subpackages?
 Summary:	OpenCT library - library for accessing smart card terminals
-Summary(pl.UTF-8):   OpenCT - biblioteka dostępu do terminali kart procesorowych
+Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.11
 Release:	1
@@ -36,7 +36,7 @@ urządzeń USB w locie (hotplug).
 
 %package -n pcsc-driver-openct
 Summary:	OpenCT driver for PC/SC
-Summary(pl.UTF-8):   Sterownik OpenCT dla PC/SC
+Summary(pl.UTF-8):	Sterownik OpenCT dla PC/SC
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	pcsc-lite
@@ -49,7 +49,7 @@ Sterownik OpenCT dla PC/SC.
 
 %package libs
 Summary:	OpenCT library
-Summary(pl.UTF-8):   Biblioteka OpenCT
+Summary(pl.UTF-8):	Biblioteka OpenCT
 License:	BSD (libopenct), LGPL (the rest)
 Group:		Libraries
 Conflicts:	openct < 0.6.2-3
@@ -62,7 +62,7 @@ Biblioteka OpenCT.
 
 %package devel
 Summary:	OpenCT development files
-Summary(pl.UTF-8):   Pliki dla programistów używających OpenCT
+Summary(pl.UTF-8):	Pliki dla programistów używających OpenCT
 License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
@@ -75,7 +75,7 @@ Pliki dla programistów używających OpenCT.
 
 %package static
 Summary:	Static OpenCT libraries
-Summary(pl.UTF-8):   Bibloteki statyczne OpenCT
+Summary(pl.UTF-8):	Bibloteki statyczne OpenCT
 License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
