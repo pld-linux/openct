@@ -2,18 +2,16 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.11
+Version:	0.6.12
 Release:	1
 License:	LGPL
 Group:		Applications
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	1cdd16b2c1443ecb986abf125af50e7f
+# Source0-md5:	1549a6673f9078620a0994971bcd27c3
 Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
-# just for config.rpath (required by aclocal/lib-link.m4)
-BuildRequires:	gettext-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
@@ -89,9 +87,8 @@ Statyczne biblioteki OpenCT.
 %prep
 %setup -q
 
-cp -f /usr/share/gettext/config.rpath .
-
 %build
+touch config.rpath
 %{__libtoolize}
 %{__aclocal} -I aclocal
 %{__autoconf}
