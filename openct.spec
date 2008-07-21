@@ -12,6 +12,7 @@ Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+BuildRequires:	libltdl-devel
 BuildRequires:	libtool
 BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
