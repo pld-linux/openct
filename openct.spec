@@ -95,6 +95,7 @@ touch config.rpath
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+CFLAGS="%{rpmcflags} -D_GNU_SOURCE=1"
 %configure \
 	--disable-rpath \
 	--with-bundle-dir=%{_libdir}/pcsc/drivers
