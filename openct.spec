@@ -88,6 +88,8 @@ Statyczne biblioteki OpenCT.
 %prep
 %setup -q
 
+%{__rm} aclocal/lib*.m4
+
 %build
 touch config.rpath
 %{__libtoolize}
