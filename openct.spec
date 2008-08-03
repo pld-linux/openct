@@ -2,12 +2,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.14
-Release:	3
+Version:	0.6.15
+Release:	1
 License:	LGPL v2.1+
 Group:		Applications
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	04a5c0c7dedcb1ca0d550b1970fbf3b7
+# Source0-md5:	70205beac03974e266fc259b6c9feaa8
 Source1:	%{name}.init
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
@@ -88,19 +88,26 @@ Statyczne biblioteki OpenCT.
 %prep
 %setup -q
 
-%{__rm} aclocal/lib*.m4
-
 %build
 touch config.rpath
 %{__libtoolize}
-%{__aclocal} -I aclocal
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 CFLAGS="%{rpmcflags} -D_GNU_SOURCE=1"
 %configure \
+	--enable-api-doc \
+	--enable-pcsc \
+	--enable-usb \
+	--enable-sunray \
+	--enable-sunrayclient \
+	--with-udev=/%{_lib}/udev \
+	--with-ifddir \
+	--with-apidocdir \
+	--enable-non-privileged \
 	--disable-rpath \
-	--with-bundle-dir=%{_libdir}/pcsc/drivers
+	--with-bundle=%{_libdir}/pcsc/drivers
 %{__make}
 
 %install
@@ -140,15 +147,14 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS TODO doc/ChangeLog doc/*.{html,css}
+%doc NEWS TODO doc/nonpersistent/ChangeLog doc/nonpersistent/wiki.out/*.{html,css}
 %attr(755,root,root) %{_bindir}/openct-tool
 %attr(755,root,root) %{_sbindir}/ifdhandler
 %attr(755,root,root) %{_sbindir}/ifdproxy
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
-%{_sysconfdir}/hotplug/usb/openct.usermap
-%attr(755,root,root) /lib/udev/openct_*
+%attr(755,root,root) /%{_lib}/udev/openct_*
 %attr(754,root,root) /etc/rc.d/init.d/openct
 %{_mandir}/man1/openct-tool.1*
 
@@ -169,7 +175,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/api/*
+%doc doc/api.out/html/*
 %attr(755,root,root) %{_libdir}/libopenct.so
 %{_libdir}/libopenct.la
 %{_libdir}/libopenctapi.la
