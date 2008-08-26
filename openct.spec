@@ -1,11 +1,11 @@
-# TODO: move hotplug and udev stuff to subpackages?
+# TODO: openctd user (group=usb)
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.15
 Release:	1
 License:	LGPL v2.1+
-Group:		Applications
+Group:		Applications/System
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
 # Source0-md5:	70205beac03974e266fc259b6c9feaa8
 Source1:	%{name}.init
@@ -33,6 +33,19 @@ piszących sterowniki, sterowniki protokołów dla T=0 i T=1,
 funkcjonalność dla portów szeregowych i USB, włącznie z podłączaniem
 urządzeń USB w locie (hotplug).
 
+%package -n udev-openct
+Summary:	udev integration for OpenCT
+Summary(pl.UTF-8):	Integracja OpenCT z udevem
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+Requires:	udev-core
+
+%description -n udev-openct
+udev integration for OpenCT.
+
+%description -n udev-openct -l pl.UTF-8
+Integracja OpenCT z udevem.
+
 %package -n pcsc-driver-openct
 Summary:	OpenCT driver for PC/SC
 Summary(pl.UTF-8):	Sterownik OpenCT dla PC/SC
@@ -49,7 +62,7 @@ Sterownik OpenCT dla PC/SC.
 %package libs
 Summary:	OpenCT library
 Summary(pl.UTF-8):	Biblioteka OpenCT
-License:	BSD (libopenct), LGPL (the rest)
+License:	BSD (libopenct), LGPL v2.1+ (the rest)
 Group:		Libraries
 Conflicts:	openct < 0.6.2-3
 
@@ -95,25 +108,23 @@ touch config.rpath
 %{__autoconf}
 %{__autoheader}
 %{__automake}
-CFLAGS="%{rpmcflags} -D_GNU_SOURCE=1"
 %configure \
+	--disable-rpath \
 	--enable-api-doc \
+	--enable-non-privileged \
 	--enable-pcsc \
-	--enable-usb \
 	--enable-sunray \
 	--enable-sunrayclient \
-	--with-udev=/%{_lib}/udev \
-	--with-ifddir \
+	--enable-usb \
 	--with-apidocdir \
-	--enable-non-privileged \
-	--disable-rpath \
-	--with-bundle=%{_libdir}/pcsc/drivers
+	--with-bundle=%{_libdir}/pcsc/drivers \
+	--with-ifddir \
+	--with-udev=/%{_lib}/udev
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/hotplug/usb,/lib/udev,/var/run/openct}
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/rc.d/init.d}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -154,9 +165,14 @@ fi
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
-%attr(755,root,root) /%{_lib}/udev/openct_*
 %attr(754,root,root) /etc/rc.d/init.d/openct
 %{_mandir}/man1/openct-tool.1*
+
+%files -n udev-openct
+%defattr(644,root,root,755)
+%attr(755,root,root) /%{_lib}/udev/openct_pcmcia
+%attr(755,root,root) /%{_lib}/udev/openct_serial
+%attr(755,root,root) /%{_lib}/udev/openct_usb
 
 %files -n pcsc-driver-openct
 %defattr(644,root,root,755)
@@ -170,6 +186,7 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libopenct.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libopenct.so.1
 %attr(755,root,root) %{_libdir}/libopenctapi.so
 %attr(755,root,root) %{_libdir}/openct-ifd.so
 
