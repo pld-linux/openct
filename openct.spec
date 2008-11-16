@@ -1,4 +1,4 @@
-# TODO: openctd user (group=usb)
+# TODO: fix openctd user uid (196 is already reserved)
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
