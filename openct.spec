@@ -157,7 +157,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%useradd -u 196 -d %{_datadir}/empty -c "openctd User" -g usb openctd
+%useradd -u 208 -d %{_datadir}/empty -c "openctd User" -g usb openctd
 
 %post
 /sbin/chkconfig --add openct
