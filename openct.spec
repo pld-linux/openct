@@ -18,6 +18,8 @@ BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/usr/sbin/useradd
+Requires(pre):	/usr/sbin/usermod
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -154,6 +156,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+%useradd -u 196 -d %{_datadir}/empty -c "openctd User" -g usb openctd
+
 %post
 /sbin/chkconfig --add openct
 if [ -f /var/lock/subsys/openct ]; then
@@ -168,6 +173,11 @@ if [ "$1" = "0" ]; then
 		/etc/rc.d/init.d/openct stop >&2
 	fi
 	/sbin/chkconfig --del openct
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+	%userremove openctd
 fi
 
 %post   libs -p /sbin/ldconfig
