@@ -18,8 +18,9 @@ BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
-Requires(pre):	/usr/sbin/usermod
+Requires(postun):	/usr/sbin/userdel
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
