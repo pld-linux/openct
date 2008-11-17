@@ -9,11 +9,7 @@
 # Source function library
 . /etc/rc.d/init.d/functions
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
-	# Check if the service is already running?
+start() {
 	if [ ! -f /var/lock/subsys/openct ]; then
 		show "Initializing OpenCT status"
 		busy
@@ -28,9 +24,9 @@ case "$1" in
 	else
 		msg_already_running openct
 	fi
-	;;
-  stop)
-	# Stop daemons.
+}
+
+stop() {
 	if [ -f /var/lock/subsys/openct ]; then
 		show "Shutting down OpenCT"
 		busy
@@ -40,21 +36,43 @@ case "$1" in
 	else
 		msg_not_running openct
 	fi
+}
+
+condrestart() {
+	if [ -f /var/lock/subsys/openct ]; then
+		stop
+		start
+	else
+		msg_not_running openct
+		RETVAL=$1
+	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
 	;;
   status)
 	status openct
 	RETVAL=$?
 	;;
-  restart)
-	$0 stop
-	$0 start
-	exit $?
-	;;
-  reload)
-  	$0 restart
-	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 	;;
 esac
