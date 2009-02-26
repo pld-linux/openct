@@ -8,6 +8,7 @@ Group:		Applications/System
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
 # Source0-md5:	70205beac03974e266fc259b6c9feaa8
 Source1:	%{name}.init
+Source2:	%{name}-initramfs-hook
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
