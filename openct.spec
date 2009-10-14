@@ -1,12 +1,12 @@
 Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
-Version:	0.6.16
+Version:	0.6.18
 Release:	1
 License:	LGPL v2.1+
 Group:		Applications/System
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
-# Source0-md5:	d8d8c63269985303a303a218c4b953d7
+# Source0-md5:	f82132df4152a624a04b14a51da79c74
 Source1:	%{name}.init
 Source2:	%{name}-initramfs-hook
 URL:		http://www.opensc-project.org/openct/
@@ -18,16 +18,16 @@ BuildRequires:	libusb-devel
 BuildRequires:	pcsc-lite-devel
 BuildRequires:	pkgconfig >= 1:0.9.0
 Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 OpenCT is a library for accessing smart card terminals. It provides a
 rich set of functions for driver writers, protocol drivers for T=0 and
-T=1, serial and USB functionality, including USB hotplugging. 
+T=1, serial and USB functionality, including USB hotplugging.
 
 %description -l pl.UTF-8
 OpenCT to biblioteka służąca do dostępu do terminali kart
@@ -159,16 +159,15 @@ install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d},/usr/
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
-install etc/openct.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/information/10freedesktop/10-usb-openct.fdi
-install etc/openct.hald $RPM_BUILD_ROOT%{_bindir}/hald-addon-openct
-install etc/openct.udev $RPM_BUILD_ROOT/etc/udev/rules.d/50-openct.rules
-
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
-
-install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks/openct
+cp -a etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
+cp -a etc/openct.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/information/10freedesktop/10-usb-openct.fdi
+cp -a etc/openct.udev $RPM_BUILD_ROOT/etc/udev/rules.d/50-openct.rules
+install -p etc/openct.hald $RPM_BUILD_ROOT%{_bindir}/hald-addon-openct
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
+install -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks/openct
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
+rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -178,17 +177,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add openct
-if [ -f /var/lock/subsys/openct ]; then
-	/etc/rc.d/init.d/openct restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/openct start\" to start openct."
-fi
+%service openct restart
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/openct ]; then
-		/etc/rc.d/init.d/openct stop >&2
-	fi
+	%service openct stop
 	/sbin/chkconfig --del openct
 fi
 
@@ -229,7 +222,7 @@ fi
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents
 %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux
-%attr(755,root,root) %dir %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd.so
+%attr(755,root,root) %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Linux/openct-ifd.so
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/Info.plist
 %{_libdir}/pcsc/drivers/openct-ifd.bundle/Contents/PkgInfo
 
