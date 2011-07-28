@@ -2,7 +2,7 @@ Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.20
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Applications/System
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
@@ -36,25 +36,13 @@ piszących sterowniki, sterowniki protokołów dla T=0 i T=1,
 funkcjonalność dla portów szeregowych i USB, włącznie z podłączaniem
 urządzeń USB w locie (hotplug).
 
-%package -n hal-openct
-Summary:	hal integration for OpenCT
-Summary(pl.UTF-8):	Integracja OpenCT z hal
-Group:		Applications/System
-Requires:	%{name} = %{version}-%{release}
-Requires:	udev-core
-
-%description -n hal-openct
-hal integration for OpenCT.
-
-%description -n hal-openct -l pl.UTF-8
-Integracja OpenCT z hal.
-
 %package -n udev-openct
 Summary:	udev integration for OpenCT
 Summary(pl.UTF-8):	Integracja OpenCT z udevem
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	udev-core
+Obsoletes:	hal-openct
 
 %description -n udev-openct
 udev integration for OpenCT.
@@ -153,16 +141,14 @@ touch config.rpath
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d},/usr/share/hal/fdi/information/10freedesktop} \
+install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d}} \
 	$RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 cp -a etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
-cp -a etc/openct.fdi $RPM_BUILD_ROOT%{_datadir}/hal/fdi/information/10freedesktop/10-usb-openct.fdi
 cp -a etc/openct.udev $RPM_BUILD_ROOT/etc/udev/rules.d/50-openct.rules
-install -p etc/openct.hald $RPM_BUILD_ROOT%{_bindir}/hald-addon-openct
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks/openct
 
@@ -211,11 +197,6 @@ fi
 %attr(755,root,root) /lib/udev/openct_serial
 %attr(755,root,root) /lib/udev/openct_usb
 %config(noreplace) %verify(not md5 mtime size) /etc/udev/rules.d/50-openct.rules
-
-%files -n hal-openct
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/hald-addon-openct
-%{_datadir}/hal/fdi/information/10freedesktop/10-usb-openct.fdi
 
 %files -n pcsc-driver-openct
 %defattr(644,root,root,755)
