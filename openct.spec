@@ -66,7 +66,6 @@ Sterownik OpenCT dla PC/SC.
 %package libs
 Summary:	OpenCT library
 Summary(pl.UTF-8):	Biblioteka OpenCT
-License:	BSD (libopenct), LGPL v2.1+ (the rest)
 Group:		Libraries
 Conflicts:	openct < 0.6.2-3
 
@@ -79,7 +78,6 @@ Biblioteka OpenCT.
 %package devel
 Summary:	OpenCT development files
 Summary(pl.UTF-8):	Pliki dla programistów używających OpenCT
-License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -92,7 +90,6 @@ Pliki dla programistów używających OpenCT.
 %package static
 Summary:	Static OpenCT libraries
 Summary(pl.UTF-8):	Bibloteki statyczne OpenCT
-License:	BSD
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
