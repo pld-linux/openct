@@ -9,6 +9,7 @@ Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
 # Source0-md5:	a1da3358ab798f1cb9232f1dbababc21
 Source1:	%{name}.init
 Source2:	%{name}-initramfs-hook
+Source3:	%{name}.tmpfiles
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -139,7 +140,8 @@ touch config.rpath
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d}} \
-	$RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks
+	$RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -148,6 +150,7 @@ cp -a etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
 cp -a etc/openct.udev $RPM_BUILD_ROOT/etc/udev/rules.d/50-openct.rules
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
 install -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks/openct
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
@@ -184,6 +187,7 @@ fi
 %attr(755,root,root) %{_sbindir}/ifdproxy
 %attr(755,root,root) %{_sbindir}/openct-control
 %dir /var/run/openct
+/usr/lib/tmpfiles.d/%{name}.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openct.conf
 %attr(754,root,root) /etc/rc.d/init.d/openct
 %{_mandir}/man1/openct-tool.1*
