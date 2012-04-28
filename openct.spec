@@ -2,14 +2,13 @@ Summary:	OpenCT library - library for accessing smart card terminals
 Summary(pl.UTF-8):	OpenCT - biblioteka dostępu do terminali kart procesorowych
 Name:		openct
 Version:	0.6.20
-Release:	3
+Release:	4
 License:	LGPL v2.1+
 Group:		Applications/System
 Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
 # Source0-md5:	a1da3358ab798f1cb9232f1dbababc21
 Source1:	%{name}.init
-Source2:	%{name}-initramfs-hook
-Source3:	%{name}.tmpfiles
+Source2:	%{name}.tmpfiles
 URL:		http://www.opensc-project.org/openct/
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -100,19 +99,6 @@ Static OpenCT libraries.
 %description static -l pl.UTF-8
 Statyczne biblioteki OpenCT.
 
-%package initramfs
-Summary:	OpenCT support scripts for initramfs-tools
-Summary(pl.UTF-8):	Skrypty dla initramfs-tools ze wsparciem dla OpenCT
-Group:		Base
-Requires:	%{name} = %{version}-%{release}
-Requires:	initramfs-tools
-
-%description initramfs
-OpenCT support scripts for initramfs-tools.
-
-%description initramfs -l pl.UTF-8
-Skrypty dla initramfs-tools ze wsparciem dla OpenCT.
-
 %prep
 %setup -q
 
@@ -140,7 +126,6 @@ touch config.rpath
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d}} \
-	$RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks \
 	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
@@ -149,8 +134,7 @@ install -d $RPM_BUILD_ROOT{/var/run/openct,/etc/{rc.d/init.d,udev/rules.d}} \
 cp -a etc/openct.conf $RPM_BUILD_ROOT%{_sysconfdir}
 cp -a etc/openct.udev $RPM_BUILD_ROOT/etc/udev/rules.d/50-openct.rules
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/openct
-install -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/initramfs-tools/hooks/openct
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install -p %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openct-*.{a,la}
 rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
@@ -228,7 +212,3 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/libopenct.a
 %{_libdir}/libopenctapi.a
-
-%files initramfs
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_datadir}/initramfs-tools/hooks/openct
