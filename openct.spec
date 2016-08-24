@@ -5,11 +5,11 @@ Version:	0.6.20
 Release:	4
 License:	LGPL v2.1+
 Group:		Applications/System
-Source0:	http://www.opensc-project.org/files/openct/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/opensc/%{name}-%{version}.tar.gz
 # Source0-md5:	a1da3358ab798f1cb9232f1dbababc21
 Source1:	%{name}.init
 Source2:	%{name}.tmpfiles
-URL:		http://www.opensc-project.org/openct/
+URL:		https://github.com/OpenSC/openct/wiki
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	libltdl-devel
