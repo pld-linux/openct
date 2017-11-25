@@ -5,6 +5,7 @@ Version:	0.6.20
 Release:	4
 License:	LGPL v2.1+
 Group:		Applications/System
+#Source0Download: https://github.com/OpenSC/openct/releases
 Source0:	http://downloads.sourceforge.net/opensc/%{name}-%{version}.tar.gz
 # Source0-md5:	a1da3358ab798f1cb9232f1dbababc21
 Source1:	%{name}.init
